@@ -5,7 +5,9 @@
 
 import os
 import time
-from colorama import Fore, Style, init
+import func_timeout
+from colorama import Fore, init
+from func_timeout import func_set_timeout
 
 init(autoreset=True)  # 配置colorama颜色自动重置，否则得手动设置Style.RESET_ALL
 apk_list = []  # 递归查询指定文件夹后获得的所有apk文件的路径列表
@@ -16,7 +18,7 @@ def pullAPK_by_SystemPath():
     根据手机的app path路径，批量拉取手机中的APK文件到本地路径
     :return: null
     """
-    pathList = ["system/priv-app", "system/app", "hw_product/app"]
+    pathList = ["system/priv-app", "system/app", "hw_product/app"]  # 执行"adb shell find . -iname *.apk 2>/dev/null"来判断路径
     print(Fore.BLUE + "[*]Start pull apk…")
     start = time.time()
     for path in pathList:
@@ -71,11 +73,19 @@ def apkReverse():
                 print("[" + str(num) + "/" + str(apkTotalNum) + "]" + "正在反编译的APK：" + file_name)
                 path_apk = os.path.join(path, file_name)
                 command = toolPath + " -d " + outputPath + file_name + " -j 4 " + path_apk
-                os.system(command)
+                try:
+                    execCommand(command)
+                except func_timeout.exceptions.FunctionTimedOut as e:
+                    print(Fore.RED + "[-]执行超时: %s" % e)
                 num = num + 1
     end = time.time()
     print(Fore.GREEN + "[*]Done.Totally time is " + str(end - start) + "s.Enjoy it!")
 
+
+@func_set_timeout(180)
+def execCommand(command):
+    os.system(command)
+    
 
 def find_apk(file_path):
     """
