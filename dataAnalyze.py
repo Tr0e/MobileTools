@@ -48,20 +48,22 @@ def compareTxtFile(filePath1, filePath2):
 
 def writeTxtToXlsx(txtPath, xlsxPath):
     """
-    将txt文件文件转换成xlsx格式的表格
+    将txt文件转换成xlsx格式的表格
     :param txtPath: 待转换的txt文件路径
     :param xlsxPath: 输出的xlsx文件路径
     :return: null
     """
     dataSource = {}
-    dictKeyList = []
-    dictValueList = []
+    dictCol1List = []
+    dictCol2List = []
     lineList = txtLineList(txtPath)
+    # 目标行数据样例：“AirTouch.apk\sources\defpackage\ih.java:    public boolean[] getBooleanArrayExtra(String str) {”
     for line in lineList:
-        dictKeyList.append(line.split(":")[0])
-        dictValueList.append(line.split(":")[1].lstrip(" "))
-    dataSource["filePath"] = dictKeyList
-    dataSource["codeResult"] = dictValueList
+        dictCol1List.append(line.split(":")[0])  # 截取每行数据第一个冒号前的数据
+        dictCol2List.append(line.split(":")[1].lstrip(" "))  # 截取每行数据第一个冒号后的数据，同时去掉字符串左侧空格
+    # 设置xlsx表格每列数据的源数据列表
+    dataSource["filePath"] = dictCol1List
+    dataSource["codeResult"] = dictCol2List
     # print(dataSource)
     print(Fore.BLUE + "[*]Start write data…")
     writer = pd.ExcelWriter(xlsxPath)
@@ -82,6 +84,6 @@ def copyRight():
 
 if __name__ == '__main__':
     copyRight()
-    # compareTxtFile("output.txt", "packageList.txt")
+    # compareTxtFile("data/output1.txt", "data/output2.txt")
     writeTxtToXlsx("data/output.txt", "data/output.xlsx")
     exit(0)
