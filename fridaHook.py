@@ -12,16 +12,20 @@ jsCode = """
 if(Java.available){
     Java.perform(function(){
         console.warn("[*]Starting Hook Script.");
-        //修改入参并打印函数调用栈
-        var hookClass = Java.use("com.Tr0e.hacker.util.MyUtil");
+        //目标Hook类
+        var hookClass = Java.use("com.Tr0e.hacker.util.MyUtil");        
+        //HooK目标函数并重写逻辑
         hookClass.fridaTest.overload('java.lang.String').implementation=function(arg1){
-            console.log("[+]Origin arg is: " + arg1);
-            arg1 = "admin123"
-            this.fridaTest(arg1);
-            console.log("[+]Modified arg is: " + arg1);
             //打印java函数的调用栈信息
             send("[+]Java调用栈信息如下：\\n" + Java.use("android.util.Log").getStackTraceString(Java.use("java.lang.Throwable").$new()));
+            //修改目标函数的入参
+            console.log("[+]Origin arg is: " + arg1);
+            arg1 = "admin123"  
+            console.log("[+]Modified arg is: " + arg1);
+            var result = this.fridaTest(arg1);
             send("Hook end.");
+            //此处注意如果被Hook的目标函数有返回值，一定要return其返回值
+            return result;
         }
     }); 
 }
@@ -92,7 +96,7 @@ def copyRight():
 
 if __name__ == '__main__':
     copyRight()  # 打印作者信息
-    session = frida.get_usb_device().attach('com.Tr0e.hacker')  # 查找USB设备并附加到目标进程
+    session = frida.get_usb_device().attach('MyPoc')  # 查找USB设备并附加到目标进程，'MyPoc'为通过frida-ps -U命令查询到的目标进程的APP名称
     script = session.create_script(jsCode)  # 在目标进程里创建脚本
     script.on('message', on_message)  # 注册消息回调
     script.load()  # 加载创建好的javascript脚本
