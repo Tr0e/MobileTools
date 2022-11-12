@@ -150,8 +150,8 @@ def getPermissionErrorList(filePath):
         # print(permissionName)
         cmd = "adb shell pm list permissions | findstr " + permissionName
         if execCommand(cmd) == "":
-            if permissionName.startswith("android.permission"):
-                continue
+            # if permissionName.startswith("android.permission"):
+            #     continue
             undefinePermissionList.append(permissionName)
     print(undefinePermissionList)
     print(Fore.GREEN + "****************************************")
