@@ -116,9 +116,9 @@ def writeDataToXlsx(xlsxPath):
 
 def analyzePermissions(file_path):
     """
-    生成指定文件夹下所有APP的四大组件属性的字典，格式为：{PackageName:"{组件类型:"组件名:exported属性值"}"}
+    生成指定文件夹下所有APP的未定义组件的字典，格式为：{PackageName:未定义组件列表}
     :param file_path: 存储反编译后的APP资源文件的路径
-    :return: {PackageName:"{组件类型:"组件名:exported属性值"}"}的字典
+    :return: {PackageName:未定义组件列表}的字典
     """
     global vulPermissionDict
     for file_ls in os.listdir(file_path):
