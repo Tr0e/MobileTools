@@ -68,21 +68,22 @@ def getAidlFile(serviceName, aidlFilePath):
     getTransactionDict(serviceName, aidlFilePath)  # 先生成TransactionCode字典
     with open(aidlFilePath, 'r', encoding='utf-8') as f:
         allJava = f.read()
-        start = allJava.find('IInterface {')
-        end = allJava.find('public static class Default implements')
-        interfaceInfo = allJava[start + 12: end - 41].replace("\n\n", "\n").strip("\n")
+        start = allJava.find('public static class Default implements')
+        end = allJava.find('public IBinder asBinder()')
+        interfaceInfo = allJava[start:end].replace("\n\n", "\n").strip("\n")
         # print(interfaceInfo)
     interfaceList = interfaceInfo.split("\n")
     # print(interfaceList)
     # 直接在原列表上使用pop删除会出现各种乱七八糟的错误，故使用新的列表来存储符合要求的原列表元素
     newInterfaceList = []
     for lineData in interfaceList:
-        if "@" in lineData or "public static" in lineData:
-            continue
-        else:
+        if "throws RemoteException" in lineData and "public" in lineData:
             lineData = lineData.lstrip(" ")
-            lineData = lineData.replace(" throws RemoteException;", "")
+            lineData = lineData.replace("public", "").lstrip(" ")
+            lineData = lineData.replace(" throws RemoteException {", "")
             newInterfaceList.append(lineData)
+        else:
+            continue
     # print(len(newInterfaceList))
     # print(Fore.GREEN + str(newInterfaceList))
     global interfaceDict
