@@ -7,3 +7,4 @@ Android渗透测试脚本, by Tr0e.
 | fridaHook.py| Android Frida Hook脚本(含调用栈）| [Frida入门实战](https://blog.csdn.net/weixin_39190897/article/details/100517918) and [Root检测绕过与加密破解](https://blog.csdn.net/weixin_39190897/article/details/114458052)|
 | intentAnalyze.py| Android组件属性和未定义权限分析|[Python攻防-AndroidMainfest数据自动化解析](https://blog.csdn.net/weixin_39190897/article/details/127826881)|
 | serviceCollect.py| 自动化收集、分析系统服务接口信息|[Android系统服务自动化信息收集与Fuzz测试](https://blog.csdn.net/weixin_39190897/article/details/127703985)|
+| pullTopApk.bat|一键查询TopActivity对应APP名称、安装路径并拉取到本地PC|Android手机关闭其它应用，只打开目标应用，然后pc运行此bat脚本即可|
